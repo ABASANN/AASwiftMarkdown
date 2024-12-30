@@ -45,6 +45,11 @@ class ViewController: UIViewController {
             md.blockquotes.fontStyle = .italic
         
             md.underlineLinks = true
+          
+            md.table.color = .red
+            md.table.borderWidth = 0.5
+            md.table.borderColor = .black
+            md.table.backgroundColor = .clear
             
             self.textView.attributedText = md.attributedString()
 

@@ -14,6 +14,7 @@ public class MarkdownTableConfiguration: NSObject {
     
     /// 表格的size
     public var tableSize: CGSize = .zero
+    public var tableStyle: TableStyles = .init()
     
     public var tableData: [[String]] = []
     
@@ -27,9 +28,10 @@ public class MarkdownTableConfiguration: NSObject {
         super.init()
     }
     
-    convenience init(_ tableData: [[String]]) {
+    convenience init(_ tableData: [[String]], table style: TableStyles) {
         self.init()
         self.tableData = tableData
+        tableStyle = style
         calculateDataSize()
         calculateItemSize()
     }
@@ -111,6 +113,14 @@ public class MarkdownTableCell: UICollectionViewCell {
         self.contentView.layer.borderColor = UIColor(white: 0, alpha: 0.2).cgColor
         self.contentView.layer.borderWidth = 1
     }
+  
+    @discardableResult
+    public func set(_ style: TableStyles) -> Self {
+        textLabel.textColor = style.color
+        contentView.layer.borderColor = style.borderColor.cgColor
+        contentView.layer.borderWidth = style.borderWidth
+        return self
+    }
     
     public func updateCell(_ text: String) {
         textLabel.text = text
@@ -140,6 +150,7 @@ public class MarkdownTable: UIView, UICollectionViewDelegate, UICollectionViewDa
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.register(MarkdownTableCell.self, forCellWithReuseIdentifier: "MarkdownTableCell")
         collectionView.isScrollEnabled = false
+        collectionView.backgroundColor = configuration.tableStyle.backgroundColor
         self.scrollView.addSubview(collectionView)
         return collectionView
     }()
@@ -180,11 +191,15 @@ public class MarkdownTable: UIView, UICollectionViewDelegate, UICollectionViewDa
     
     public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell: MarkdownTableCell = collectionView.dequeueReusableCell(withReuseIdentifier: "MarkdownTableCell", for: indexPath) as? MarkdownTableCell else { return UICollectionViewCell() }
-        cell.updateCell(self.configuration.tableData[indexPath.section][indexPath.row])
+      
+        cell.set(configuration.tableStyle)
+          .updateCell(self.configuration.tableData[indexPath.section][indexPath.row])
+      
+        let backgroundColor = configuration.tableStyle.backgroundColor
         if indexPath.section == 0 {
-            cell.contentView.backgroundColor = .init(white: 0.1, alpha: 0.1)
+          cell.contentView.backgroundColor = backgroundColor.withAlphaComponent(0.1)
         } else {
-            cell.contentView.backgroundColor = .white
+          cell.contentView.backgroundColor = backgroundColor
         }
         return cell
     }
