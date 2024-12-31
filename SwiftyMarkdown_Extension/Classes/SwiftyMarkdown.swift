@@ -158,6 +158,25 @@ If that is not set, then the system default will be used.
     #endif
 }
 
+@objc open class TableStyles : NSObject, FontProperties {
+    public var fontName: String?
+    
+    #if os(macOS)
+    public var color = NSColor.black
+    public var borderColor = NSColor.black
+    public var backgroundColor = NSColor.white
+    #else
+    public var color = UIColor.black
+    public var borderColor = UIColor.black
+    public var backgroundColor = UIColor.white
+    #endif
+    
+    public var fontSize: CGFloat = 0.0
+    public var fontStyle: FontStyle = .normal
+  
+    public var borderWidth : CGFloat = 1.0
+}
+
 /// A class that takes a [Markdown](https://daringfireball.net/projects/markdown/) string or file and returns an NSAttributedString with the applied styles. Supports Dynamic Type.
 @objc open class SwiftyMarkdown: NSObject {
     
@@ -250,6 +269,9 @@ If that is not set, then the system default will be used.
     
     /// The default body styles. These are the base styles and will be used for e.g. headers if no other styles override them.
     open var body = LineStyles()
+  
+    /// The styles to apply to table found in the Markdown
+    open var table = TableStyles()
     
     /// The styles to apply to any blockquotes found in the Markdown
     open var blockquotes = LineStyles()
@@ -348,6 +370,7 @@ If that is not set, then the system default will be used.
         h5.fontSize = size
         h6.fontSize = size
         body.fontSize = size
+        table.fontSize = size
         italic.fontSize = size
         bold.fontSize = size
         code.fontSize = size
@@ -365,6 +388,7 @@ If that is not set, then the system default will be used.
         h5.color = color
         h6.color = color
         body.color = color
+        table.color = color
         italic.color = color
         bold.color = color
         code.color = color
@@ -381,6 +405,7 @@ If that is not set, then the system default will be used.
         h5.color = color
         h6.color = color
         body.color = color
+        table.color = color
         italic.color = color
         bold.color = color
         code.color = color
@@ -398,6 +423,7 @@ If that is not set, then the system default will be used.
         h5.fontName = name
         h6.fontName = name
         body.fontName = name
+        table.fontName = name
         italic.fontName = name
         bold.fontName = name
         code.fontName = name
@@ -479,7 +505,7 @@ extension SwiftyMarkdown {
         switch markdownLineStyle {
         case .table:
             if line.line == "" {
-                let config: MarkdownTableConfiguration = .init(line.tableData)
+                let config: MarkdownTableConfiguration = .init(line.tableData, table: table)
                 let table: MarkdownTable = .init(CGRect(x: 0, y: 0, width: min(UIScreen.main.bounds.width - 64, config.tableSize.width), height: config.tableSize.height), config)
                 let tableAttchMent: SubviewTextAttachment = SubviewTextAttachment(view: table, size: CGSize(width: table.bounds.width, height: table.bounds.height) )
                 finalAttributedString.append(NSAttributedString(attachment: tableAttchMent))
