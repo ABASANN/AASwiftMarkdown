@@ -117,6 +117,12 @@ public class MarkdownTableCell: UICollectionViewCell {
     @discardableResult
     public func set(_ style: TableStyles) -> Self {
         textLabel.textColor = style.color
+        if let fontName = style.fontName {
+          textLabel.font = .init(name: fontName, size: style.fontSize)
+        } else {
+          textLabel.font = .systemFont(ofSize: 16)
+        }
+        
         contentView.layer.borderColor = style.borderColor.cgColor
         contentView.layer.borderWidth = style.borderWidth
         return self

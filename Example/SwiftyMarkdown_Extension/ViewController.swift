@@ -46,6 +46,8 @@ class ViewController: UIViewController {
         
             md.underlineLinks = true
           
+            md.table.fontName = "CourierNewPSMT"
+            md.table.fontSize = 12
             md.table.color = .red
             md.table.borderWidth = 0.5
             md.table.borderColor = .black

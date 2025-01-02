@@ -171,7 +171,7 @@ If that is not set, then the system default will be used.
     public var backgroundColor = UIColor.white
     #endif
     
-    public var fontSize: CGFloat = 0.0
+    public var fontSize: CGFloat = 16.0
     public var fontStyle: FontStyle = .normal
   
     public var borderWidth : CGFloat = 1.0
