@@ -41,10 +41,9 @@ public class MarkdownTableConfiguration: NSObject {
         for rows in tableData {
             var rowSize: [CGSize] = []
             for item in rows {
-                let font = UIFont.systemFont(ofSize: 16.0)
                 let maxSize = CGSize(width: CGFloat.greatestFiniteMagnitude, height: 22)
                 let maxHeightSize = CGSize(width: maxWidth, height: CGFloat.greatestFiniteMagnitude)
-                let attributes: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: font]
+                let attributes: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: configFont]
                 let maxWidthSize = (item as NSString).boundingRect(with: maxSize, options: .usesLineFragmentOrigin, attributes: attributes, context: nil).size
                 if maxWidthSize.width > maxWidth {
                     let maxHeightSize = (item as NSString).boundingRect(with: maxHeightSize, options: .usesLineFragmentOrigin, attributes: attributes, context: nil).size
@@ -89,6 +88,14 @@ public class MarkdownTableConfiguration: NSObject {
             }
         }
         tableSize = CGSize(width: widthArr.reduce(0, {$0+$1}), height: heightArr.reduce(0, {$0+$1}))
+    }
+  
+    private var configFont: UIFont {
+        get {
+            let name = tableStyle.fontName ?? ""
+            return UIFont(name: name, size: tableStyle.fontSize)
+              ?? UIFont.systemFont(ofSize: 16.0)
+        }
     }
 }
 
