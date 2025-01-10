@@ -23,6 +23,10 @@ public class MarkdownTableConfiguration: NSObject {
     private let rightMinMargin: CGFloat = 10
     private let topMinMargin: CGFloat = 10
     private let bottomMinMargin: CGFloat = 10
+  
+    var horizontalMergin: CGFloat {
+        get { leftMinMargin + rightMinMargin }
+    }
     
     public override init() {
         super.init()
@@ -171,7 +175,10 @@ public class MarkdownTable: UIView, UICollectionViewDelegate, UICollectionViewDa
     lazy var scrollView: UIScrollView = {
         let scroll:UIScrollView = .init(frame: CGRect(x: 0, y: 0, width: self.bounds.width, height: self.bounds.height))
         scroll.showsHorizontalScrollIndicator = false
-        scroll.contentSize = CGSize.init(width: self.configuration.tableSize.width, height: self.configuration.tableSize.height)
+        scroll.contentSize = CGSize.init(
+          width: self.configuration.tableSize.width + configuration.horizontalMergin,
+          height: self.configuration.tableSize.height
+        )
         self.addSubview(scroll)
         return scroll
     }()
