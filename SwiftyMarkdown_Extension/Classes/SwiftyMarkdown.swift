@@ -185,6 +185,24 @@ If that is not set, then the system default will be used.
     ]
     
     static public var lineRules = [
+        LineRule(
+          token: "     - ",
+          type: MarkdownLineStyle.unorderedListIndentSecondOrder,
+          removeFrom: .leading,
+          shouldTrim: false
+        ),
+        LineRule(
+          token: "    - ",
+          type: MarkdownLineStyle.unorderedListIndentFirstOrder,
+          removeFrom: .leading,
+          shouldTrim: false
+        ),
+        LineRule(
+          token: "   - ",
+          type: MarkdownLineStyle.unorderedListIndentFirstOrder,
+          removeFrom: .leading,
+          shouldTrim: false
+        ),
         LineRule(token: "=", type: MarkdownLineStyle.previousH1, removeFrom: .entireLine, changeAppliesTo: .previous),
         LineRule(token: "-", type: MarkdownLineStyle.previousH2, removeFrom: .entireLine, changeAppliesTo: .previous),
         LineRule(token: "|", type: MarkdownLineStyle.table, removeFrom: .leading, changeAppliesTo: .preAndBack),
